@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trackingapi", "trackingapi\trackingapi.csproj", "{0311F039-B7F5-4473-9EF5-409F419AB8D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trackingapi", "trackingapi\trackingapi.csproj", "{0311F039-B7F5-4473-9EF5-409F419AB8D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tracking.client", "tracking.client\tracking.client.csproj", "{08C27CF6-0170-42BA-85DF-6E8DF31A3781}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tracking.client", "tracking.client\tracking.client.csproj", "{08C27CF6-0170-42BA-85DF-6E8DF31A3781}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackingFrontEnd", "TrackingFrontEnd\TrackingFrontEnd.csproj", "{C855775C-CEDA-423E-956C-609F6A4ABF25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{08C27CF6-0170-42BA-85DF-6E8DF31A3781}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08C27CF6-0170-42BA-85DF-6E8DF31A3781}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08C27CF6-0170-42BA-85DF-6E8DF31A3781}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C855775C-CEDA-423E-956C-609F6A4ABF25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C855775C-CEDA-423E-956C-609F6A4ABF25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C855775C-CEDA-423E-956C-609F6A4ABF25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C855775C-CEDA-423E-956C-609F6A4ABF25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
