@@ -57,16 +57,6 @@ namespace TrackingFrontEnd.Controllers
                 return View();
             }
 
-            //try
-            //{
-            //    var token = await _itracking.GetToken(_configuration["Tracking:ClientID"], _configuration["Tracking:ClientSecret"]);
-            //}
-            //catch
-            //{
-
-            //}
-
-            //return View();
         }
 
         // GET: IssueModels/Details/5
@@ -109,29 +99,24 @@ namespace TrackingFrontEnd.Controllers
         public async Task<IActionResult> Create([Bind("Id,Title,Description,Priority,IssueType,Created,Completed")] IssueModel issueModel)
         {
             List<IssueModel> issues = new List<IssueModel>();
-            client.BaseAddress = new Uri(_configuration["Tracking: URL"]);
+            client.BaseAddress = new Uri(_configuration["Tracking:URL"]);
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            HttpResponseMessage response = await client.GetAsync("api/issue");
+            HttpResponseMessage response = await client.PostAsJsonAsync("api/issue",issueModel);
             response.EnsureSuccessStatusCode();
 
             if (response.IsSuccessStatusCode)
             {
-                var issuesFromDb = await response.Content.ReadFromJsonAsync<IEnumerable<IssueModel>>();
-
-                foreach (var issue in issuesFromDb)
-                {
-                    issues.Add(issue);
-                }
+               // var issuesFromDb = await response.Content.ReadFromJsonAsync<IssueModel>();
 
                 return RedirectToAction(nameof(Index));
 
             }
             else
             {
-                Console.WriteLine("No results");
-                return View(issueModel);
+                
+                return NotFound();
             }
 
         }
@@ -139,17 +124,26 @@ namespace TrackingFrontEnd.Controllers
         // GET: IssueModels/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.IssueModel == null)
-            {
-                return NotFound();
-            }
+            IssueModel issueReturned = new IssueModel();
+            client.BaseAddress = new Uri(_configuration["Tracking:URL"]);
+            client.DefaultRequestHeaders.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var issueModel = await _context.IssueModel.FindAsync(id);
-            if (issueModel == null)
+            HttpResponseMessage response = await client.GetAsync("api/issue/id?id="+id);
+            response.EnsureSuccessStatusCode();
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                issueReturned = await response.Content.ReadFromJsonAsync<IssueModel>();
+
+                return View(issueReturned);
+
+            }
+            else
             {
                 return NotFound();
             }
-            return View(issueModel);
         }
 
         // POST: IssueModels/Edit/5
@@ -159,50 +153,51 @@ namespace TrackingFrontEnd.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Priority,IssueType,Created,Completed")] IssueModel issueModel)
         {
-            if (id != issueModel.Id)
+            IssueModel issueReturned = new IssueModel();
+            client.BaseAddress = new Uri(_configuration["Tracking:URL"]);
+            client.DefaultRequestHeaders.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage response = await client.PutAsJsonAsync("api/issue/"+id,issueModel);
+            response.EnsureSuccessStatusCode();
+
+
+            if (response.IsSuccessStatusCode)
             {
+
+                return RedirectToAction(nameof(Index));
+
+            }
+            else
+            {
+                
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(issueModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!IssueModelExists(issueModel.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(issueModel);
         }
 
         // GET: IssueModels/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.IssueModel == null)
+            IssueModel issueReturned = new IssueModel();
+            client.BaseAddress = new Uri(_configuration["Tracking:URL"]);
+            client.DefaultRequestHeaders.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage response = await client.GetAsync("api/issue/id?id=" + id);
+            response.EnsureSuccessStatusCode();
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                issueReturned = await response.Content.ReadFromJsonAsync<IssueModel>();
+
+                return View(issueReturned);
+
+            }
+            else
             {
                 return NotFound();
             }
-
-            var issueModel = await _context.IssueModel
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (issueModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(issueModel);
         }
 
         // POST: IssueModels/Delete/5
@@ -210,23 +205,27 @@ namespace TrackingFrontEnd.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.IssueModel == null)
+            IssueModel issueReturned = new IssueModel();
+            client.BaseAddress = new Uri(_configuration["Tracking:URL"]);
+            client.DefaultRequestHeaders.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage response = await client.DeleteAsync("api/issue/" + id);
+            response.EnsureSuccessStatusCode();
+
+
+            if (response.IsSuccessStatusCode)
             {
-                return Problem("Entity set 'TrackingFrontEndContext.IssueModel'  is null.");
+
+                return RedirectToAction(nameof(Index));
+
             }
-            var issueModel = await _context.IssueModel.FindAsync(id);
-            if (issueModel != null)
+            else
             {
-                _context.IssueModel.Remove(issueModel);
+
+                return NotFound();
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
-        private bool IssueModelExists(int id)
-        {
-          return (_context.IssueModel?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
     }
 }
